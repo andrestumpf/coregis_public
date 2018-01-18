@@ -1,0 +1,12 @@
+scipy
+python-dateutil
+shapely
+matplotlib
+numpy
+gdal
+opencv-python
+paramiko
+stats
+statsmodels
+
+
