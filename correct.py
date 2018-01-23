@@ -9,7 +9,7 @@ import os
 import ogr
 import footprints
 import mask
-import stats
+from scipy import stats
 import array2geotiff
 import correct_image
 import destripe

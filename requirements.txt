@@ -4,9 +4,9 @@ shapely
 matplotlib
 numpy
 gdal
-opencv-python
 paramiko
-stats
 statsmodels
-
+opencv
+python-fmask
+pillow
 
