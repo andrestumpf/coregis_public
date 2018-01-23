@@ -33,6 +33,9 @@ def create_cloud_mask(granule_info,
     
     # DEBUG
     granule_info = granule_info_master
+    pixel_size_x = pixel_size_x_cloud_mask
+    pixel_size_y = pixel_size_y_cloud_mask
+    output_folder=work_folder
     
     """
 

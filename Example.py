@@ -16,9 +16,9 @@ import statsmodels.api as sm
 
 # set paths
 fmask_path = './python-fmask-0.4.3/build/scripts.linux-x86_64-3.5'
-otbpath = '~/OTB/install/bin'
-micmac_path = '~/micmac'
-work_folder = '~/Documents/DebreSina/out'
+otbpath = os.path.expanduser('~/OTB/install/bin')
+micmac_path = os.path.expanduser('~/micmac')
+work_folder = os.path.expanduser('~/Documents/DebreSina/out')
 
 # set parameters for mask generation
 pixel_size_x_cloud_mask = 30
@@ -312,3 +312,4 @@ x0,x1 = ax.get_xlim()
 y0,y1 = ax.get_ylim()
 ax.set_aspect(abs(x1-x0)/abs(y1-y0))
 
+plt.close('all')
