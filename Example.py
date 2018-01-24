@@ -13,12 +13,12 @@ import matplotlib.pyplot as plt
 import cv2
 import numpy as np
 import statsmodels.api as sm
+import sys
 
 # set paths
-fmask_path = './python-fmask-0.4.3/build/scripts.linux-x86_64-3.5'
-otbpath = os.path.expanduser('~/OTB/install/bin')
+fmask_path = os.path.dirname(sys.executable)
+otbpath = os.path.expanduser('/usr/bin')
 micmac_path = os.path.expanduser('~/micmac')
-work_folder = os.path.expanduser('~/Documents/DebreSina/out')
 
 # set parameters for mask generation
 pixel_size_x_cloud_mask = 30
@@ -37,8 +37,8 @@ zoom=0.25
 cc_thresh=0.33
 
 # set the input folders
-master_granule = '/home/stumpf/Documents/DebreSina/S2A_OPER_PRD_MSIL1C_PDMC_20160128T013226_R092_V20160125T080606_20160125T080606.SAFE/GRANULE/S2A_OPER_MSI_L1C_TL_SGS__20160125T113126_A003092_T37PEL_N02.01'
-slave_granule = '/home/stumpf/Documents/DebreSina/S2A_MSIL1C_20170119T074231_N0204_R092_T37PEL_20170119T075325.SAFE/GRANULE/L1C_T37PEL_A008240_20170119T075325'
+master_granule = os.path.expanduser('~/Documents/test_data/S2A_OPER_PRD_MSIL1C_PDMC_20160128T013226_R092_V20160125T080606_20160125T080606.SAFE/GRANULE/S2A_OPER_MSI_L1C_TL_SGS__20160125T113126_A003092_T37PEL_N02.01')
+slave_granule = os.path.expanduser('~/Documents/test_data/S2A_MSIL1C_20170119T074231_N0204_R092_T37PEL_20170119T075325.SAFE/GRANULE/L1C_T37PEL_A008240_20170119T075325')
 
 # assure existance of output folder
 if work_folder:
