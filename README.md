@@ -1,4 +1,4 @@
-coregis: The Python implementation of <cite>[1][1]</cite> to improve the co-registration of 
+coregis: The Python implementation of <cite>[1]</cite> to improve the co-registration of 
 Sentinel-2 and Landsat-8 images with a particular focus on Earth 
 surface motion measurements.
 
@@ -80,7 +80,13 @@ A more complete documentation is coming soon. For a simple use case have a look 
 # Examples #
 
 * see Example.py
+* Note that the test data is not included in the repository. 
+It can be downloaded from <https://scihub.copernicus.eu>
 
+![before coregistration](figs/regression_before_coregis.png?raw=true)
+*Fig.1: Regression among master and slave image before correction.*
+![after coregistration](figs/regression_after_coregis.png?raw=true)
+*Fig.2: Regression among master and slave image after correction.*
 # Licence #
 
 * GPL (v3+)
