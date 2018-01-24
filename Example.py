@@ -19,6 +19,7 @@ import sys
 fmask_path = os.path.dirname(sys.executable)
 otbpath = os.path.expanduser('/usr/bin')
 micmac_path = os.path.expanduser('~/micmac')
+work_folder = os.path.expanduser('~/Documents/test_data/out')
 
 # set parameters for mask generation
 pixel_size_x_cloud_mask = 30
@@ -252,7 +253,6 @@ cbar = plt.colorbar(ns_plot)
 cbar.set_label('Offset [pixel]')
 ax1.ticklabel_format(useOffset=False, style='plain')
 
-
 # regression analysis before after
 ds = gdal.Open(master_slave_info['pan_master'])
 band =ds.GetRasterBand(1)
@@ -276,6 +276,7 @@ X_plot = np.linspace(0,1,100)
 ax.plot(band_master, results.fittedvalues, color='red', alpha=0.5, linewidth=2)
 plt.xlabel('TOA reflectance master')
 plt.ylabel('TOA reflectance slave')
+plt.title('Regression before correction')
 ax.text(0.95, 0.95, r'$R^2$=' + r2,
         horizontalalignment='right',
         verticalalignment='top',
@@ -286,8 +287,8 @@ x0,x1 = ax.get_xlim()
 y0,y1 = ax.get_ylim()
 ax.set_aspect(abs(x1-x0)/abs(y1-y0))
 
-
-ds = gdal.Open(master_slave_info['out']['corrected_bands'][8])
+master_slave_info['out']['corrected_bands'].sort()
+ds = gdal.Open(master_slave_info['out']['corrected_bands'][3])
 band =ds.GetRasterBand(1)
 band_slave = band.ReadAsArray(0,0,500,500)
 band_slave = band_slave/10000
@@ -302,6 +303,7 @@ X_plot = np.linspace(0,1,100)
 ax.plot(band_master, results.fittedvalues, color='red', alpha=0.5, linewidth=2)
 plt.xlabel('TOA reflectance master')
 plt.ylabel('TOA reflectance slave')
+plt.title('Regression after correction')
 ax.text(0.95, 0.95, r'$R^2$=' + r2,
         horizontalalignment='right',
         verticalalignment='top',
