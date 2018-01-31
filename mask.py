@@ -33,9 +33,6 @@ def create_cloud_mask(granule_info,
     
     # DEBUG
     granule_info = granule_info_master
-    pixel_size_x = pixel_size_x_cloud_mask
-    pixel_size_y = pixel_size_y_cloud_mask
-    output_folder=work_folder
     
     """
 
@@ -465,6 +462,54 @@ def check_no_data(raster_1_path, raster_2_path, no_data_value=0):
         no_data_mask = np.logical_or(band_array_1, band_array_2)
 
     return no_data_mask
+
+
+def make_no_data_mask(raster_1_path, raster_2_path, work_folder, no_data_value=0):
+
+    """
+    Function to generate a mask of no data areas in the two input grids
+    Args:
+        raster_1_path: full path to the first input image
+        raster_2_path: full path to the second input image
+        no_data_value: value signaling no data, e.g. 0 for S-2
+
+    Returns: path to MicMac compatible mask
+
+    DEBUG
+    raster_1_path = lidar_2009
+    raster_2_path = dsm_2015
+
+    """
+    ds_1 = gdal.Open(raster_1_path)
+    band_link_1 = ds_1.GetRasterBand(1)
+    band_array_1 = band_link_1.ReadAsArray()
+
+    ds_2 = gdal.Open(raster_2_path)
+    band_link_2 = ds_2.GetRasterBand(1)
+    band_array_2 = band_link_2.ReadAsArray()
+
+    if not band_array_1.shape == band_array_2.shape:
+        print('Dimension of the first array :' + band_array_1.shape)
+        print('Dimension of the second array :' + band_array_2.shape)
+        raise ValueError('The two input images do not share the same dimension')
+
+    band_array_1 = band_array_1 == no_data_value
+    band_array_2 = band_array_2 == no_data_value
+
+    if not np.any(band_array_1) and not np.any(band_array_1):
+        print('Data does not contain no data areas...')
+        no_data_mask = np.zeros(band_array_1.shape, dtype=bool)
+
+    else:
+        no_data_mask = np.logical_or(band_array_1, band_array_2)
+
+    no_data_mask = np.invert(no_data_mask)
+    no_data_mask = no_data_mask * 255
+    mask_name = os.path.splitext(os.path.basename(raster_1_path))[0] + '_' +  os.path.splitext(os.path.basename(raster_2_path))[0] + '_mask.tif'
+    mask_path = os.path.join(work_folder, mask_name)
+    array2geotiff(no_data_mask, mask_path, ref=raster_1_path, out_datatype=gdal.GDT_Byte)
+
+    return mask_path
 
 
 def combine_masks(master_slave_info,

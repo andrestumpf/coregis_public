@@ -23,6 +23,7 @@ from scipy.stats import norm
 import matplotlib.mlab as mlab
 import datetime
 import warnings
+import array2geotiff
 
 
 def get_granule_info(search_folder, band_s2=3):
@@ -292,6 +293,7 @@ def find_master_by_date(granule_info_list, master_date):
 
 
 def make_all_pairs_with_master(granule_info_list, master_index):
+
     """
     Pairs all granules in the list of granule info dictionaries with the granule specified through the master index
     Args:
@@ -1299,7 +1301,7 @@ class SSHSession(object):
         self.sftp.chmod(remotefile,755)
 
 
-def clip_raster(rast, features_path, gt=None, nodata=-9999):
+def clip_raster(rast, features_path, gt=None, nodata=-9999, band_index=1):
 
     """
     Clips a raster (given as either a gdal.Dataset or as a numpy.array
@@ -1316,6 +1318,7 @@ def clip_raster(rast, features_path, gt=None, nodata=-9999):
         features_path   The path to the clipping features
         gt              An optional GDAL GeoTransform to use instead
         nodata          The NoData value; defaults to -9999.
+        band_index      The band that should be used, starts counting at 1
     """
 
     def array_to_image(a):
@@ -1353,7 +1356,8 @@ def clip_raster(rast, features_path, gt=None, nodata=-9999):
     # Can accept either a gdal.Dataset or numpy.array instance
     if not isinstance(rast, np.ndarray):
         gt = rast.GetGeoTransform()
-        rast = rast.ReadAsArray()
+        band_link = rast.GetRasterBand(band_index)
+        rast = band_link.ReadAsArray()
 
     # Create an OGR layer from a boundary shapefile
     features = ogr.Open(features_path)
