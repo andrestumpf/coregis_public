@@ -11,7 +11,21 @@ Remote Sensing. 2018, 10(2), 160; doi:10.3390/rs10020160
 * Install some system libraries
 ```bash
 sudo apt-get update
-sudo apt-get install git cmake make imagemagick libimage-exiftool-perl exiv2  libgeo-proj4-perl libx11-dev cmake-curses-gui freeglut3-dev
+sudo apt-get install git \
+                     cmake \
+                     make \
+                     imagemagick \
+                     libimage-exiftool-perl \
+                     exiv2 \
+                     libgeo-proj4-perl \
+                     libx11-dev \
+                     cmake-curses-gui \
+                     freeglut3-dev \
+                     libpcre3 \
+                     libpcre3-dev \
+                     libtiff5 \
+                     libtiff5-dev \
+                     libgdal-dev
 ```
 
 * Install the MicMac library
@@ -21,7 +35,7 @@ git clone https://github.com/micmacIGN/micmac.git
 cd micmac
 mkdir build
 cd build
-cmake -DWITH_QT5=OFF -DBUILD_POISSON=OFF
+cmake -DWITH_QT5=OFF -DBUILD_POISSON=OFF ../
 make install -j4
 echo 'export PATH="~/micmac/bin:$PATH"' >> ~/.bashrc
 source .bashrc
@@ -57,6 +71,12 @@ source deactivate conda_coregis
 ```bash
 cd ~
 git clone https://github.com/andrestumpf/coregis_public.git
+```
+
+* Compile MPIC binaries
+```bash
+cd ~/coregis_public/mpic
+make
 ```
 
 * Open it in your favourite Python IDE e.g. Pycharm
