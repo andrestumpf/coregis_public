@@ -341,8 +341,14 @@ def get_detector_footprint(gml_path, diagn=False):
     points_left, ind_left = get_border(detector_coord[start_iter + 1], side='left')
     if len(points_left) == 1:
         # happens if the first detector element is so small that the second still starts in the upper left
-        # raise Exception('Fix me... I still cant handle the case of very small first detector elements')
         start_iter += 1
+        # David fix: test again after having skipped the first detector
+        # check if there is only one detector element
+        if (final_iter - start_iter) == 1:
+            new_detector_coord.append(detector_coord[start_iter])
+            if diagn:
+                plt.plot(new_detector_coord[start_iter][:, 0], new_detector_coord[start_iter][:, 1], 'o-', color=next(colors))
+            return new_detector_coord
 
     for i in range(start_iter, final_iter):
 
