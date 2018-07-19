@@ -91,6 +91,12 @@ Settings > Project > Project Interpreter > Button on the upper right >
 Add local > Existing Environment > Select:
 ```~/anaconda/envs/conda_coregis/bin/python```
 
+## Run with docker container (not yet functional)
+
+```bash
+cd ~/coregis_public
+sudo docker build . -t docker_coregis
+```
 
 
 

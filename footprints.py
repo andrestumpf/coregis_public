@@ -603,6 +603,15 @@ def get_detector_footprint(gml_path, diagn=False):
                 elif detector_coord[i][mask].size == 2: # Not yet on the right side but nodata area at the upper right
                     new_detector_coord.append(np.vstack((insert_left_points, detector_coord[i][mask], mid_points, insert_left_points[0])))
 
+                # David: added this correction, but I'm not absolutely sure about correctness ... experience will tell us <<<
+                elif detector_coord[i][mask].size == 4 and detector_coord[i][mask][1][0] == scene_extent[0] and \
+                                detector_coord[i][mask][1][1] == scene_extent[2]:
+                    # Not yet on the right side but nodata area at the upper right and lower left corner in detector
+                    new_detector_coord.append(np.vstack((insert_left_points, detector_coord[i][mask][0],
+                                                         mid_points, detector_coord[i][mask][1],
+                                                         insert_left_points[0])))
+                    # David:  end >>>
+
                 # the element is on the left extent of the scene but does not contain the lower left corner
                 # i.e. no data area at the lower left
                 elif not any(detector_coord[i][detector_coord[i][:, 0] == scene_extent[0], 1] == scene_extent[2]):
