@@ -43,12 +43,12 @@ def generate_all_mask_xml(master_slave_info_list):
     return master_slave_info_list_updated
 
 
-def generate_param_xml(mask_path, pan_1_path, pan_2_path, work_folder, sub_folder=None, SzW=4, CorrelMin=0.3, Inc=1, RegulBase=0.5,
+def generate_param_xml(mask_path, pan_1_path, pan_2_path, work_folder, sub_folder=None, SzW=4, CorrelMin=0.3, Inc=1,
+                       RegulBase=0.5,
                        mode='coregis'):
-
     """
     Wrapper to gen_xml_params_displacement.pl to generate a MicMac parameter file
-    
+
     :param mask_path: full path to the mask raster
     :param pan_1_path: full path to the first image to be correlated
     :param pan_2_path: full path to the second image to be correlated
@@ -58,7 +58,8 @@ def generate_param_xml(mask_path, pan_1_path, pan_2_path, work_folder, sub_folde
     :param CorrelMin: minimum correlation threshold
     :param Inc: size of the search area (actual search area is ceiling(Inc*0.8)+2
     :param RegulBase: regularization parameter
-    :param mode: 'coregis' or 'displacement', displacement yields finer resolution but considerably increases the runtime
+    :param mode: 'coregis' or 'displacement' or 'bathy', displacement yields finer resolution but considerably increases
+                 the runtime, 'bathy' is adapted for large displacements of sumarine dunes
     :return: full paths to the current work folder and the generated MicMac parameter file
     """
 
@@ -69,7 +70,8 @@ def generate_param_xml(mask_path, pan_1_path, pan_2_path, work_folder, sub_folde
     if sub_folder:
         correl_folder = os.path.join(work_folder, sub_folder)
         os.makedirs(correl_folder, exist_ok=True)
-        correl_folder_current = os.path.join(correl_folder, os.path.splitext(pan_1_name)[0] + '_' + os.path.splitext(pan_2_name)[0])
+        correl_folder_current = os.path.join(correl_folder,
+                                             os.path.splitext(pan_1_name)[0] + '_' + os.path.splitext(pan_2_name)[0])
         os.makedirs(correl_folder_current, exist_ok=True)
     else:
         correl_folder_current = work_folder
@@ -77,10 +79,12 @@ def generate_param_xml(mask_path, pan_1_path, pan_2_path, work_folder, sub_folde
     out_xml = os.path.join(correl_folder_current, 'param.xml')
 
     # generate MicMac XML file
-    if mode=='coregis':
+    if mode == 'coregis':
         script = './perl/gen_xml_params_coregis.pl'
-    if mode=='displacement':
+    if mode == 'displacement':
         script = './perl/gen_xml_params_displacement.pl'
+    if mode == 'bathy':
+        script = './perl/gen_xml_params_bathy.pl'
 
     subprocess.call(['perl', script,
                      '-s', str(SzW),
