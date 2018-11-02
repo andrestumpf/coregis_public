@@ -10,6 +10,7 @@ import warnings
 import itertools
 import coregis_filter
 import ogr
+import sys
 
 
 def create_cloud_mask(granule_info,
@@ -35,6 +36,8 @@ def create_cloud_mask(granule_info,
     granule_info = granule_info_master
     
     """
+    # determine path of current python environment to pass it on to subprocess.call (failsafe for running in Pycharm)
+    env_folder_path = os.path.dirname(sys.executable)
 
     # figure out which script to use
     if granule_info['satellite'] == 'S2':
@@ -68,7 +71,9 @@ def create_cloud_mask(granule_info,
         cmd = ['python3', os.path.join(fmask_path, 'fmask_sentinel2makeAnglesImage.py'), '-i']
         cmd.append(granule_info['metadata'])
         cmd = cmd + ['-o', angle_path]
-        subprocess.call(cmd)
+        subprocess.call(cmd, env = {"PATH": env_folder_path})
+
+
 
         # create the cloud mask output image
         cmd = ['python3', os.path.join(fmask_path, 'fmask_sentinel2Stacked.py'),
@@ -77,7 +82,7 @@ def create_cloud_mask(granule_info,
                '-o', cloud_mask_path]
 
         print('Generating cloud mask...')
-        subprocess.call(cmd)
+        subprocess.call(cmd, env = {"PATH": env_folder_path})
 
     elif granule_info['satellite'] == 'L8':
 
@@ -140,7 +145,7 @@ def create_cloud_mask(granule_info,
         subprocess.call(['python3', os.path.join(fmask_path, 'fmask_usgsLandsatMakeAnglesImage.py'),
                          '-m', meta_data_path,
                          '-t', ref_img_path,
-                         '-o', angles_path])
+                         '-o', angles_path], env = {"PATH": env_folder_path})
 
         # generate saturation mask
         saturationmask_path = os.path.join(granule_folder, 'saturationmask.img')
@@ -148,7 +153,7 @@ def create_cloud_mask(granule_info,
         subprocess.call(['python3', os.path.join(fmask_path, 'fmask_usgsLandsatSaturationMask.py'),
                          '-i', ref_img_path,
                          '-m', meta_data_path,
-                         '-o', saturationmask_path])
+                         '-o', saturationmask_path], env = {"PATH": env_folder_path})
 
         # compute TOA
         toa_path = os.path.join(granule_folder, 'toa.img')
@@ -157,7 +162,7 @@ def create_cloud_mask(granule_info,
                          '-i', ref_img_path,
                          '-m', meta_data_path,
                          '-z', angles_path,
-                         '-o', toa_path])
+                         '-o', toa_path], env = {"PATH": env_folder_path})
 
         # compute cloud mask
         cloud_mask_path = os.path.join(granule_folder, 'cloud_mask.img')
@@ -168,7 +173,7 @@ def create_cloud_mask(granule_info,
                          '-m', meta_data_path,
                          '-z', angles_path,
                          '-s', saturationmask_path,
-                         '-o', cloud_mask_path])
+                         '-o', cloud_mask_path], env = {"PATH": env_folder_path})
 
     else:
         raise Exception(granule_info['satellite'] + ' is not a suported option. Choose S2 of L8.')

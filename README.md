@@ -62,7 +62,7 @@ conda update conda
 
 * Create conda virtual environment with all necessary packages
 ```bash
-conda create -n conda_coregis python=3 python-fmask opencv scipy shapely paramiko pillow paramiko matplotlib statsmodels
+conda create -n conda_coregis python=3 python-fmask=0.5 opencv py-opencv scipy shapely paramiko pillow paramiko matplotlib==2.2.3 statsmodels
 source activate conda_coregis
 source deactivate conda_coregis
 ```
