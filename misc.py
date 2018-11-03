@@ -20,10 +20,8 @@ import rios
 from osgeo import gdalnumeric
 from PIL import Image, ImageDraw
 from scipy.stats import norm
-import matplotlib.mlab as mlab
 import datetime
 import warnings
-import array2geotiff
 
 
 def get_granule_info(search_folder, band_s2=3):
@@ -1503,7 +1501,7 @@ def iterative_gaussian_fit(sample, max_iterations=100, min_change_sigma=0.005, d
                             verticalalignment='top',
                             transform=axes[0].transAxes)
         # text = axes[0].text(-1., 1000000., 'RMSE=' + str(RMSE), fontsize=12)
-        y = mlab.normpdf( bins, mu, sigma)
+        y = norm.pdf( bins, mu, sigma)
         axes[1].plot(bins, y, 'r--', linewidth=2)
         axes[1].set_title('Gaussian fit', fontsize=12)
         axes[1].set_ylim(ylim[0], ylim[1])
@@ -1524,7 +1522,7 @@ def iterative_gaussian_fit(sample, max_iterations=100, min_change_sigma=0.005, d
 
         if diagnose: # update plot
             hist, bins = np.histogram(sample, range=[lower_bin, upper_bin], density=False, bins=100)
-            y = mlab.normpdf(bins, mu, sigma)
+            y = norm.pdf(bins, mu, sigma)
             for rect, h in zip(bars, hist):
                 rect.set_height(h)
             for line in axes[1].lines:
