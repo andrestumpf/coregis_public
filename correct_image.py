@@ -391,6 +391,7 @@ def apply_correction(band_paths, corr_grid_dict, satellite):
 
             # save corrected band to disk
             band_corrected_array = np.rint(band_corrected_array)
+            band_corrected_array = band_corrected_array.astype('uint16', copy=False)
             dst_filename = os.path.join(os.path.dirname(corr_grid_path_px1),
                                         os.path.splitext(os.path.basename(band))[0] + '_corrected.tif')
             try:

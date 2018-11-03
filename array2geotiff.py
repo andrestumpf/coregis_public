@@ -1,7 +1,6 @@
 import numpy as np
 import gdal
 from osgeo import gdal_array
-from osgeo import gdal_array
 
 def array2geotiff(band_array, dst_filename, ref, out_datatype=None):
 
