@@ -11,6 +11,27 @@ import os
 import misc
 import gdal
 import math
+from xml.dom import minidom
+
+# date when ESA changed the format of the detector footprints
+DETFOO_CHANGE_DATE = "20181106"
+
+
+def get_sensing_time(gml_path):
+
+    """
+    Reads the sensing time from string gml:id="" in the detfoo GML
+    :param gml_path: full path of the GML file
+    :return: string of the format YYYYMMDD
+    """
+
+    xml = minidom.parse(gml_path)
+    root_elem = xml.getElementsByTagName("eop:Mask")[0]
+    root_items = list(root_elem.attributes.items())
+    for key, val in root_items:
+        if key == 'gml:id':
+            gml_id = val
+    return gml_id.split('_')[-5][:8]
 
 
 def get_detector_footprint(gml_path, diagn=False):
@@ -85,6 +106,7 @@ def get_detector_footprint(gml_path, diagn=False):
         else:
             return False
 
+
     def get_border(poly_coords, side='right'):
 
         """
@@ -142,10 +164,6 @@ def get_detector_footprint(gml_path, diagn=False):
             ind = np.array(ind)
 
         return line, ind
-
-    # DEBUG
-    # line_iter = points_right
-    # line_project = points_left
 
 
     def get_mid_points(line_iter, line_project, diagnose=False):
@@ -281,6 +299,13 @@ def get_detector_footprint(gml_path, diagn=False):
 
         return line_mid
 
+    # handles new detfoo metadata format since 06/11/2018
+    sensing_date = get_sensing_time(gml_path)
+    if sensing_date >= DETFOO_CHANGE_DATE:
+        use_new_df = True
+    else:
+        use_new_df = False
+
     # get detector positions from GML metadata files
     inSource = ogr.Open(gml_path)
     inLayer = inSource.GetLayer()
@@ -325,6 +350,9 @@ def get_detector_footprint(gml_path, diagn=False):
             ax.set_aspect(1.0)
 
         plt.show()
+
+    if use_new_df:  # we can safe all the hustle
+        return detector_coord
 
     new_detector_coord = []
     final_iter = len(detector_coord)
