@@ -141,20 +141,29 @@ def get_detector_footprint(gml_path, diagn=False):
         if side == 'right':  # start from UPPER RIGHT and move down the line until horizontal
             delta_y = -1
             while delta_y < 0:
-                delta = poly_coords[ind_start + i + 1, :] - poly_coords[ind_start + i]
-                delta_y = delta[1]
-                line.append(poly_coords[ind_start + i])
-                ind.append(ind_start + i)
-                i += 1
-
+                if (ind_start + i + 1) == len(poly_coords):
+                    line.append(poly_coords[ind_start + i])
+                    ind.append(ind_start + i)
+                    break
+                else:
+                    delta = poly_coords[ind_start + i + 1, :] - poly_coords[ind_start + i]
+                    delta_y = delta[1]
+                    line.append(poly_coords[ind_start + i])
+                    ind.append(ind_start + i)
+                    i += 1
         if side == 'left':  # start from UPPER LEFT and move up the line until horizontal
             delta_y = 1
             while delta_y > 0:
-                delta = poly_coords[ind_start + i + 1, :] - poly_coords[ind_start + i]
-                delta_y = delta[1]
-                line.append(poly_coords[ind_start + i])
-                ind.append(ind_start + i)
-                i += 1
+                if (ind_start + i + 1) == len(poly_coords):
+                    line.append(poly_coords[ind_start + i])
+                    ind.append(ind_start + i)
+                    break
+                else:
+                    delta = poly_coords[ind_start + i + 1, :] - poly_coords[ind_start + i]
+                    delta_y = delta[1]
+                    line.append(poly_coords[ind_start + i])
+                    ind.append(ind_start + i)
+                    i += 1
 
         line = np.array(line)
         ind = np.array(ind)
